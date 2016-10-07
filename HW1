@@ -70,7 +70,6 @@ public:
 		y = _y;
 	}
 
-
 	virtual void draw()
 	{
 	}
@@ -514,6 +513,8 @@ int main(void)
 		for (int j = 0; j < 5; j++)
 			for (int i = 0; i < 4; i++)
 		{
+			draw_ob[i][j]->draw();
+
 			draw_circle[i][j].setting(x_c[j], y_c[i]);
 			if (cursor_recog(xpos, 640 - ypos, x_c[j], y_c[i]) == false)
 			{
@@ -524,21 +525,6 @@ int main(void)
 				draw_circle[i][j].DrawButton_Blue();
 			}
 		}
-		for (int j = 0; j < 4; j++)
-		for (int i = 0; i < 5; i++)
-		{
-			draw_ob[j][i]->draw();
-		}
-
-
-
-		/*for (int i = 0; i < 2; i++)
-		{
-			second[i] = new c2(x_c[1], y_c[i]);
-			second[i]->draw();
-		}*/
-
-
 
 		glDrawPixels(width, height, GL_RGB, GL_FLOAT, pixels);
 
