@@ -1,0 +1,117 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+
+//template
+
+//1번
+
+//template<class t>
+//void print(const t& i)
+//{
+//	std::cout << i << std::endl;
+//}
+//
+//void main()
+//{
+//	print(1);
+//	print(2.345f);
+//	print("hello world");
+//}
+
+
+//2번
+
+//template<class first>
+//class vector2d
+//{
+//public:
+//	first x;
+//	first y;
+//	vector2d(const first& x_input, const first& y_input)
+//		:x(x_input), y(y_input)
+//	{}
+//
+//	void print()
+//	{
+//		std::cout << x << " " << y << std::endl;
+//	}
+//};
+//
+//
+//void main()
+//{
+//	vector2d<int> int_(1, 1);
+//	int_.print();
+//
+//	vector2d<float> float_(1.4f, 2.5f);
+//	float_.print();
+//
+//	vector2d<char*> string_("hi", "hello");
+//	string_.print();
+//
+//}
+//
+
+class draw
+{
+public:
+	void dosth()
+	{
+		std::cout << "draw" << std::endl;
+	}
+};
+
+class move
+{
+public:
+	void dosth()
+	{
+		std::cout << "move" << std::endl;
+	}
+};
+
+
+class interface
+{
+public:
+	virtual void dosth() = 0;
+};
+
+template<class t>
+class object : public interface
+{
+public:
+	void dosth()
+	{
+		t operation;
+		operation.dosth();
+	}
+
+};
+
+
+
+
+
+
+
+int main()
+{
+	std::vector<interface*> obj_list;
+
+	obj_list.push_back(new object<draw>);
+	obj_list.push_back(new object<move>);
+
+	//object<draw> draw_object;
+	//draw_object.dosth();
+
+	//object<move> move_object;
+	//move_object.dosth();
+
+	for (auto itr : obj_list)
+		itr->dosth();
+
+	return 0;
+}
