@@ -1,0 +1,19 @@
+#include<iostream>
+#include<string>
+
+
+template<class first>
+class vector2d
+{
+public:
+	first x;
+	first y;
+	vector2d(const first& x_input, const first& y_input)
+		:x(x_input), y(y_input)
+	{}
+
+	void print()
+	{
+		std::cout << x << " " << y << std::endl;
+	}
+};
