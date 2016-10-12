@@ -17,3 +17,19 @@ public:
 		std::cout << x << " " << y << std::endl;
 	}
 };
+
+
+//print
+
+//void main()
+//{
+//	vector2d<int> int_(1, 1);
+//	int_.print();
+//
+//	vector2d<float> float_(1.4f, 2.5f);
+//	float_.print();
+//
+//	vector2d<char*> string_("hi", "hello");
+//	string_.print();
+//
+//}
