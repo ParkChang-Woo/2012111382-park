@@ -1,0 +1,62 @@
+#include<iostream>
+
+class test
+{
+public:
+
+	int a;
+
+	void(test::*callback_)() = nullptr;
+//pure virtual function
+
+	void exec()
+	{
+		if (callback_ != nullptr)
+		(this->*callback_)();
+	}
+
+	void command(test* test, void(test::*callback_)())
+	{
+		(test->*callback_)();
+	}
+
+	void drawCircle()
+	{
+		std::cout << "Draw Circle " << a << std::endl;
+	}
+
+
+	void drawBox()
+	{
+		std::cout << "Draw Box " << a << std::endl;
+
+	}
+};
+
+
+
+
+
+
+
+
+int main()
+{
+	test my_circle;
+	my_circle.callback_ = &test::drawCircle;
+	my_circle.a = 123;
+
+	test my_box;
+	my_box.callback_ = &test::drawBox;
+	my_box.a = 456;
+	
+	my_circle.command(&my_box, &test::drawCircle);
+	my_circle.command(&my_circle, &test::drawCircle);
+
+	my_circle.exec();
+	my_box.exec();
+
+
+
+	return 0;
+}
