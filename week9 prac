@@ -1,0 +1,199 @@
+
+
+///////11.01 _2
+#include<iostream>
+//step 1 : 클래스 만들기
+//step 2 : 곱하기 연산자 정의
+//step 3 : 실행
+
+using namespace std;//A.
+
+
+class vector3
+{
+public:
+	int x, y, z;
+
+	vector3()
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+
+	vector3(int x_, int y_, int z_)
+	{
+		x = x_;
+		y = y_;
+		z = z_;
+	}
+
+	friend ostream& operator<<(ostream& os, const vector3& vec);
+	//ostream이 undefine되어있다>> A.로
+
+	vector3& operator=(const vector3& d)
+	{
+		this->x = d.x;
+		this->y = d.y;
+		this->z = d.z;
+		return *this;
+	}
+	friend vector3 operator+(vector3 ans, const vector3& d)
+	{
+		ans.x += d.x;
+		ans.y += d.y;
+		ans.z += d.z;
+		return ans;
+	}
+
+	friend int operator*(const vector3& d1, const vector3& d2)
+	{
+		float result = 0;
+		result += d1.x*d2.x;
+		result += d1.y*d2.y;
+		result += d1.z*d2.z;
+		return result;
+	}
+
+
+};
+
+ostream& operator<<(ostream& os, const vector3& d)
+{
+	os << d.x << " " << d.y << " " << d.z;
+	return os;
+}
+
+
+class matrix3
+{
+public:
+	vector3 a, b, c;
+
+	matrix3 ()
+	{
+		a = vector3(0,0,0);
+		b = vector3(0, 0, 0);
+		c = vector3(0, 0, 0);
+	}
+
+	matrix3(vector3 a_, vector3 b_,  vector3 c_)
+	{
+		a = a_;
+		b = b_;
+		c = c_;
+	}
+
+	friend	vector3 operator*(const matrix3& d1, const vector3& d2)
+	{
+		vector3 result;
+		result.x = d1.a * d2;
+		result.y = d1.b * d2;
+		result.z = d1.c * d2;
+		return result;
+	}
+
+	
+};
+
+ostream& operator<<(ostream& os, const matrix3& d)
+{
+	os << d.a << " " << d.b << " " << d.c;
+	return os;
+}
+
+
+
+
+void main()
+{
+
+	vector3 a(1, 2, 3), b, c;
+	b = vector3(4, 5, 6);
+	c = a + b;
+
+	matrix3 m(a,b,c);
+	vector3 f = m*b;
+
+	std::cout << a << std::endl;
+	std::cout << b << std::endl;
+	std::cout << c << std::endl;
+	std::cout << m << std::endl;
+	std::cout << f << std::endl;
+
+}
+
+
+
+
+
+
+///////11.01 _1
+
+//#include<iostream>
+////step 1 : 클래스 만들기
+////step 2 : 생성자(constructor)만들기
+////step 3 : operator overloading 대입연산자 더하기 연산자.
+//
+//using namespace std;//A.
+//
+//
+//class vector3
+//{
+//public:
+//	int x, y, z;
+//
+//	vector3()
+//	{
+//		x = 0;
+//		y = 0;
+//		z = 0;
+//	}
+//
+//	vector3(int x_,int y_,int z_)
+//	{
+//		x = x_;
+//		y = y_;
+//		z = z_;
+//	}
+//
+//	friend ostream& operator<<(ostream& os, const vector3& vec);
+//	//ostream이 undefine되어있다>> A.로
+//
+//	vector3& operator=(const vector3& d)
+//	{
+//		this->x = d.x;
+//		this->y = d.y;
+//		this->z = d.z;
+//		return *this;
+//	}
+//	friend vector3 operator+(vector3 ans,const vector3& d)
+//	{
+//		ans.x += d.x;
+//		ans.y+= d.y;
+//		ans.z += d.z;
+//		return ans;
+//	}
+//
+//
+//};
+//
+//ostream& operator<<(ostream& os,const vector3& d)
+//{
+//	os << d.x << " " << d.y << " " << d.z;
+//	return os;
+//}
+//
+//
+//void main()
+//{
+//
+//	vector3 a(1, 2, 3), b, c;
+//	b = vector3(4, 5, 6);
+//	c = a+b;
+//
+//	std::cout << a << std::endl;
+//	std::cout << b << std::endl;
+//	std::cout << c << std::endl;
+//
+//}
