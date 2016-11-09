@@ -1,0 +1,55 @@
+#include<iostream>
+//operator overloading 
+using namespace std;
+
+class vectorND
+{
+public:
+	int* arr = new int[10];
+
+	int* v;
+
+	vectorND(const int& num_)
+	{
+		v = new int[num_];
+	}
+
+	vectorND()
+	{}
+
+	int num;
+	int& assign(const int& i)
+	{
+		return arr[i];
+	}
+
+	int& operator[](const int& k)
+	{
+		return arr[k];
+	}
+
+};
+
+class MatrixMXN 
+{
+public:
+	vectorND* mat = new vectorND[10];
+
+	
+};
+
+
+
+int main()
+{
+	vectorND a(5);
+	a[0]=1;
+	//a.v[0] = 1;
+
+	//a.assign(4) = 10;
+
+
+	std::cout << a.arr[4] << std::endl;
+
+	return 0;
+}
