@@ -1,0 +1,59 @@
+#include<iostream>
+
+
+
+
+class linear
+{
+public:
+
+	double a, b;
+
+	
+	linear()
+		: a(0),b(0)
+	{}
+
+	double getY(const double& input)
+	{
+		return a * input + b;
+	}
+
+
+};
+
+int main()
+{
+
+	linear lh;
+
+	const double x[3] = { 0,1,2 };
+	const double y[3] = { 0,2,4 };
+
+	const float ir = 0.01;
+
+	for (int tr = 0; tr < 10000;tr++)
+	for (int i = 0; i < 3; i++)
+	{
+		
+		const double error = y[i] - lh.getY(x[i]);
+		const double sqr_error = error * error;
+		//y = a*x +b //square error = (y-a*x-b)^2
+
+		const double dse_da = 2.0*(error) * -x[i];
+		const double dse_db = 2.0*(error) * -1;
+		
+
+
+		lh.a -= dse_da*ir;
+		lh.b -= dse_db*ir;
+
+
+		std::cout <<y[i]<<" "<< lh.getY(x[i]) << std::endl;
+	}
+
+
+
+
+	return 0;
+}
