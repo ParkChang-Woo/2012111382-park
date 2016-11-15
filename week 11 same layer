@@ -48,10 +48,15 @@ int main()
 			test.b -= dse_db*ir;
 
 
+			if (tr == 1 || tr==10 || tr == 50 || tr == 100 || tr == 250 || tr == 1000)
+			{
+				pre = test.getY(test.getY(x[i]));
+				std::cout << y[i] << " " << pre << std::endl;
+			}
+		
 		}
-		double pre_ = test.getY(test.getY(x[3]));
-		std::cout << y[3] << " " << pre_ << std::endl;
-	}
+		//double pre_ = test.getY(test.getY(x[3]));
+		//std::cout << y[3] << " " << pre_ << std::endl;
 
 	return 0;
 
