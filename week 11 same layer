@@ -1,0 +1,58 @@
+#include<iostream>
+
+using namespace std;
+
+class layer
+{
+public:
+
+	double a, b;
+
+	layer()
+		:a(0),b(0)
+	{}
+
+
+	double getY(const double& input)
+	{
+		return a*input + b;
+	}
+};
+
+
+
+int main()
+{
+	layer test;
+
+	const double x[5] = { 0.1,0.2,0.3,0.4,0.5 };
+	const double y[5] = { 4,5,6,7,8 };
+
+	const double ir = 0.01;
+
+	for (int tr = 0; tr < 10000; tr++)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+
+			double pre = test.getY(test.getY(x[i]));
+
+			const double error = y[i] - pre;
+			//const double sqr_error = 0.5*error * error;
+			//y = a*x +b //square error = (y-a*x-b)^2
+
+			const double dse_da = (error)* (-2 * test.a*x[i] - test.b);
+			const double dse_db = (error)* (-test.a + 1);
+
+			test.a -= dse_da*ir;
+			test.b -= dse_db*ir;
+
+
+		}
+		double pre_ = test.getY(test.getY(x[3]));
+		std::cout << y[3] << " " << pre_ << std::endl;
+	}
+
+	return 0;
+
+}
