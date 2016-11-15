@@ -42,7 +42,7 @@ int main()
 			//y = a*x +b //square error = (y-a*x-b)^2
 
 			const double dse_da = (error)* (-2 * test.a*x[i] - test.b);
-			const double dse_db = (error)* (-test.a + 1);
+			const double dse_db = (error)* (-test.a - 1);
 
 			test.a -= dse_da*ir;
 			test.b -= dse_db*ir;
