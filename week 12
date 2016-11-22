@@ -1,0 +1,248 @@
+#include<iostream>
+using namespace std;
+
+#define MAX2(a,b)	((a)>(b) ? (a) : (b))
+#define MAX3(a,b,c)	 (MAX2(MAX2(a,b),(c)))
+#define MAX4(a,b,c,d)	(MAX2(MAX3(a,b,c),(d)))
+
+
+class Celldata
+{
+public :
+	double q_[4] = { 0.0, 0.0, 0.0, 0.0 };
+					// up,down,left,right
+	double reward_ = 0.0;
+
+
+	Celldata()
+	{}
+
+	double getmaxQ()
+	{
+		return MAX4(q_[0], q_[1], q_[2], q_[3]);
+	}
+};
+
+class grid
+{
+public:
+	int i_, j_;
+	Celldata *q_arr = nullptr;
+
+	grid(const int& i_, const int& j_)
+		: i_(i_),j_(j_)
+	{
+		q_arr = new Celldata[i_*j_];
+	}
+
+
+	Celldata& getCell(const int& i, const int& j)
+	{
+		return q_arr[i + i_*j];
+	}
+
+	bool isInside(const int& i, const int& j)
+	{//i,j가 그리드에 있나 안있나
+		if (i < 0)return false;
+		if (i >= i_) return false;
+
+		if (j < 0)return false;
+		if (j >= j_)return false;
+
+		return true;
+	}
+
+
+
+	void printsigned(const float& v)
+	{
+		if (v > 0.0f) printf("+%1.1f", v);
+		else if (v < 0.0f)printf("%1.1f", v);
+		else printf(" 0.0");
+	}
+
+
+	void print()
+	{
+		for (int j = j_-1; j >= 0; j--)
+		{
+			for (int i = 0; i < i_; i++)
+			{
+				Celldata &cell = getCell(i, j);
+		
+				printf("    "); printsigned(cell.q_[0]); printf("    ");
+				printf("    ");
+			}
+			printf("\n");
+			for (int i = 0; i < i_; i++)
+			{
+				Celldata &cell = getCell(i, j);
+
+				printsigned(cell.q_[2]); printf("    "); printsigned(cell.q_[3]);
+				printf("    ");
+			}
+			printf("\n");
+
+			for (int i = 0; i < i_; i++)
+			{
+				Celldata &cell = getCell(i, j);
+				 
+				printf("    "); printsigned(cell.q_[1]); printf("    ");
+				printf("    ");
+			}
+			printf("\n\n");
+		}
+	}
+
+	//소멸자 만드세요.
+	~grid()
+	{
+	}
+};
+
+class agent
+{
+public:
+	int i_, j_; // position  in grid world
+	double reward_; // reward sum
+
+	agent()
+		:i_(0),j_(0),reward_(0.0)
+	{}
+};
+
+
+
+int main()
+{
+	cout << " Hello Grid World" << endl;
+
+	const int world_i = 3, world_j = 2;
+
+	grid world(world_i, world_j);
+
+	//reference return type
+
+//world.getCell(i,j).reward_ =10;
+
+
+
+	for (int i = 0; i < world_i; i++)
+	{
+		for (int j = 0; j < world_j; j++)
+		{
+			if(i==2&&j==1)
+			world.getCell(i, j).reward_ = 1.0;
+			else if (i == 2 && j == 0)
+				world.getCell(i, j).reward_ = -1.0;
+			else
+				world.getCell(i, j).reward_ = -0.1;
+		}
+	}
+	
+
+	agent my_agent;
+
+	world.print();
+
+	for (int t = 0; t < 10000; t++)
+	{
+		const int action = rand() % 4;//random policy
+
+		int i = my_agent.i_, j = my_agent.j_;
+		int i_old = i, j_old = j;
+
+		switch (action)
+		{
+		case 0:
+			j++;//up
+			break;
+
+		case 1:
+			j--;//down
+			break;
+
+		case 2:
+			i--;//left
+			break;
+
+		case 3:
+			i++;//right
+			break;
+
+		}
+
+		double ir = 0.05;
+		double df = 0.9995;
+
+		if (world.isInside(i, j) == true)//
+		{
+			//move agent
+			my_agent.i_ = i;
+			my_agent.j_ = j;
+
+			//update reward(r_t)
+			my_agent.reward_ = world.getCell(my_agent.i_, my_agent.j_).reward_;
+
+			//update q values of previous cell(q_t)
+			if (my_agent.i_ - i_old == 0 && my_agent.j_ - j_old == 1)
+			{//한칸 위로 이동
+				printf("%d,%d _q[0](up) = %lf , state %lf \n", i_old, j_old, world.getCell(i_old, j_old).q_[0], my_agent.reward_);
+				world.getCell(i_old, j_old).q_[0] +=
+					ir*(my_agent.reward_ + df* MAX4(world.getCell(my_agent.i_, my_agent.j_).q_[0], world.getCell(my_agent.i_, my_agent.j_).q_[1], world.getCell(my_agent.i_, my_agent.j_).q_[2], world.getCell(my_agent.i_, my_agent.j_).q_[3]) - world.getCell(i_old, j_old).q_[0]);
+			}
+		
+			if (my_agent.i_ - i_old == 0 && my_agent.j_ - j_old == -1)
+			{//한칸 밑으로 이동
+				printf("%d,%d _q[1](down) = %lf , state %lf \n", i_old, j_old, world.getCell(i_old, j_old).q_[1], my_agent.reward_);
+				world.getCell(i_old, j_old).q_[1] +=
+					ir*(my_agent.reward_ + df* MAX4(world.getCell(my_agent.i_, my_agent.j_).q_[0], world.getCell(my_agent.i_, my_agent.j_).q_[1], world.getCell(my_agent.i_, my_agent.j_).q_[2], world.getCell(my_agent.i_, my_agent.j_).q_[3]) - world.getCell(i_old, j_old).q_[1]);
+			}
+
+			if (my_agent.i_ - i_old == 1 && my_agent.j_ - j_old == 0)
+			{//한칸 오른쪽으로 이동
+				printf("%d,%d _q[3](right) = %lf , state %lf  \n", i_old, j_old, world.getCell(i_old, j_old).q_[3], my_agent.reward_);
+				world.getCell(i_old, j_old).q_[3] +=
+					ir*(my_agent.reward_ + df* MAX4(world.getCell(my_agent.i_, my_agent.j_).q_[0], world.getCell(my_agent.i_, my_agent.j_).q_[1], world.getCell(my_agent.i_, my_agent.j_).q_[2], world.getCell(my_agent.i_, my_agent.j_).q_[3]) - world.getCell(i_old, j_old).q_[3]);
+			}
+
+			if (my_agent.i_ - i_old == -1 && my_agent.j_ - j_old == 0)
+			{//한칸 왼쪽으로 이동
+				printf("%d,%d _q[2](left) = %lf , state %lf \n", i_old, j_old, world.getCell(i_old, j_old).q_[2], my_agent.reward_);
+				world.getCell(i_old, j_old).q_[2] +=
+					ir*(my_agent.reward_ + df* MAX4(world.getCell(my_agent.i_, my_agent.j_).q_[0], world.getCell(my_agent.i_, my_agent.j_).q_[1], world.getCell(my_agent.i_, my_agent.j_).q_[2], world.getCell(my_agent.i_, my_agent.j_).q_[3]) - world.getCell(i_old, j_old).q_[2]);
+			}
+
+
+
+			//reset if agent is in final cells
+			if (my_agent.i_ == 2 && my_agent.j_ == 1)
+			{
+				my_agent.i_ = 0;
+				my_agent.j_ = 0;
+			}
+			else if (my_agent.i_ == 2 && my_agent.j_ == 0)
+			{
+				my_agent.i_ = 0;
+				my_agent.j_ = 0;
+			}
+
+		}
+		else
+		{
+			//you may give nagative reward(penalty) to agent.
+		}
+
+
+		//cout << "agent status" << my_agent.i_ << " " << my_agent.j_ << endl;
+		//cout << "action" << action << endl;
+
+	//	world.print();
+	}
+	world.print();
+
+	return 0;
+
+
+
+}
