@@ -1,0 +1,83 @@
+/////////////////////////////////////////////////////////////////////////////
+// Authored by Jeong-Mo Hong for CSE4060 course at Dongguk University CSE  //
+// jeongmo.hong@gmail.com                                                  //
+// Do whatever you want license.                                           //
+/////////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
+
+#include "NeuralNetwork.h"
+ 
+void main()
+{
+	//linear regression neuron matrix 다 이해하면 충분히 짤 수 있다.
+
+
+	VectorND<VectorND<D>> x_input_array;
+	x_input_array.initialize(2);
+	x_input_array[0].initialize(2);
+	x_input_array[0][0] = 0.0;
+	x_input_array[0][1] = 0.0;
+
+	x_input_array[1].initialize(2);
+	x_input_array[1][0] = 0.5;
+	x_input_array[1][1] = 1.0;
+
+	//x[0] = 0.0; x[1] = 0.0;
+
+	VectorND<VectorND<D>> y_target_array(2);
+	y_target_array[0].initialize(2);
+	y_target_array[0][0] = 0.1f;
+	y_target_array[0][1] = 0.5f;
+
+	y_target_array[1].initialize(2);
+	y_target_array[1][0] = 0.8f;
+	y_target_array[1][1] = 0.9f;
+
+
+
+	//////전코드
+	//y_target[0] = 0.3f;
+		
+	//x입력이 0, 0(입력이 두개) y는 0.3(출력은 하나)
+
+	VectorND<D> y_temp(2);
+
+	NeuralNetwork nn_;
+	nn_.initialize(2, 2, 1);// (인풋 개수, 아웃풋 개수, 레이어 개수)
+	//레이어 최소가 0인데 하나는 넣는다.
+	nn_.alpha_ = 0.1;//러닝 레이트
+
+	for (int i = 0; i < 100; i++)
+		for (int e = 0; e < 2;e++)
+	{
+		nn_.setInputVector(x_input_array[e]);
+		nn_.propForward();
+
+		nn_.copyOutputVector(y_temp);
+		std::cout << y_temp <<" !!! "<< y_target_array[e]<<std::endl;
+
+		nn_.propBackward(y_target_array[e]);
+	
+	//처음에는 랜덤넘버로 초기화.
+		//랜덤넘버를 어떻게 결정함?
+	}
+
+	//바꾼 코드 : ex 2개에 대해서 트레이닝 시킨 코드
+
+
+	//test data
+
+	VectorND<D> test_data(2);
+	test_data[0] = 0.2f;
+	test_data[1] = 0.5f;
+
+	nn_.setInputVector(test_data);
+	nn_.propForward();
+
+	nn_.copyOutputVector(y_temp);
+	std::cout << y_temp << std::endl;
+
+
+
+}
