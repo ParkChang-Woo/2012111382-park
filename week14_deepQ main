@@ -1,0 +1,83 @@
+//pseudo code
+
+class game
+{
+public:
+	//state
+	VectorND current_state;
+
+	void processInput(const int& action)
+	{
+		//do something to respond user input
+	}
+
+	void update(float& reward, int& flag) // flag_terminal  
+	{
+		//update (change) current_state_
+
+		//reward - high number when player chose good action
+		//reward - low number when player chose bad action
+	}
+
+	VectorND& getCurrentState()
+	{
+		return current_state;
+	}
+
+	//rendering,sound, ....
+
+
+};
+
+
+class AI
+{
+public:
+	NeuralNetwork nn_;
+
+	void setInput(const VectorND& current_state)
+	{
+		//give current_state to nn_ as an input
+		nn_.setInput(current_state);
+	}
+
+	int getAction()
+	{
+		nn_.proforward();
+		vectorND q_values = nn_.getOutput();
+
+		action = q_values.getMaxix();
+	}
+	
+	void train(const float& reward)
+	{
+		//train NN....
+	}
+
+};
+
+void main()
+{
+	Game game_;
+	AI ai_;
+
+	//initialize game and ai
+
+	while (true) //game main loop
+	{
+		ai_.setInput(game_.getCurrentState());
+
+		game_.processInput(ai_.getAction());
+
+		float reward;
+
+		game_.update(reward);
+
+		ai_.train(reward);
+
+	}
+
+
+
+
+}
